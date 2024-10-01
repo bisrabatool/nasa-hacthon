@@ -1,57 +1,80 @@
 .map-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  }
-  
-  .map-search-bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-  
-  .search-input {
-    width: 100%;
-    max-width: 400px;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    margin-right: 10px;
-    font-size: 16px;
-  }
-  
-  .search-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .search-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .leaflet-map {
-    height: 500px; 
-    width: 100%;   
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 15px;
-  }
-  
-  .location-info {
-    text-align: center;
-    font-size: 16px;
-  }
-  
-  .location-info p {
-    margin: 5px 0;
-  }
-  
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: rgb(2500, 2500, 250, 0.06);
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 2; /* Ensures the map container is above the moon image */
+  cursor: pointer;
+  border: solid rgb(225, 225, 225, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+.moon-image {
+  position: absolute;
+
+  z-index: 1; /* Ensures the moon is behind the map container */
+}
+
+.map-search-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
+  padding-left: 16px;
+  margin-right: 10px;
+  font-size: 16px;
+  color: #fff;
+  border: 1px solid #ffffff5c;
+  background-color: rgb(2500, 2500, 250, 0.06);
+  outline: none;
+  border-radius: 19px;
+  transition: all 0.5s;
+}
+.search-input:focus {
+  box-shadow: 0 0 1rem hsl(270, 14%, 95%);
+  outline: none;
+}
+
+.search-button {
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+
+  color: #fff;
+  font-family: "Monomaniac One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  background-color: #ffffff5c;
+  border: none;
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+}
+
+.leaflet-map {
+  height: 500px; 
+  width: 100%;   
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.location-info {
+  text-align: center;
+  font-size: 16px;
+}
+
+.location-info p {
+  margin: 5px 0;
+}
