@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import axios from "axios";
 import L from "leaflet";
 import "./Map.css";
 import "leaflet/dist/leaflet.css";
 import markerIcon from "../assets/marker.png";
-// import { ToastContainer, toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
-import "./Register.css";
 import moonImage from "../assets/earth1.png";
 
 const getRandomBoxShadow = (n) => {
@@ -19,6 +16,7 @@ const getRandomBoxShadow = (n) => {
   }
   return shadows.join(", ");
 };
+
 const customIcon = new L.Icon({
   iconUrl: markerIcon,
   iconSize: [32, 32],
@@ -26,8 +24,19 @@ const customIcon = new L.Icon({
   popupAnchor: [0, -32],
 });
 
-const UpdateMapCenter = ({ coordinates }) => {
-  const map = useMap();
+const UpdateMapCenter = ({ coordinates, setBounds }) => {
+  const map = useMapEvents({
+    moveend: () => {
+      const bounds = map.getBounds();
+      const minLat = bounds.getSouthWest().lat;
+      const maxLat = bounds.getNorthEast().lat;
+      const minLng = bounds.getSouthWest().lng;
+      const maxLng = bounds.getNorthEast().lng;
+
+      setBounds({ minLat, maxLat, minLng, maxLng });
+    },
+  });
+
   useEffect(() => {
     if (coordinates) {
       map.setView([coordinates.lat, coordinates.lng], 13);
@@ -52,11 +61,18 @@ const Map = () => {
       getRandomBoxShadow(100)
     );
   }, []);
+
   const [locations, setLocations] = useState({
     name: "",
     coordinates: { lat: 51.505, lng: -0.09 },
   });
   const [inputLocations, setInputLocations] = useState("");
+  const [bounds, setBounds] = useState({
+    minLat: null,
+    maxLat: null,
+    minLng: null,
+    maxLng: null,
+  });
 
   const fetchLocation = async () => {
     try {
@@ -98,8 +114,26 @@ const Map = () => {
         {
           name: inputLocations,
           lat: coordinates.lat,
-          lng: coordinates.lng,
+          lon: coordinates.lng,
+          minlat: bounds.minLat,
+          minlon: bounds.minLng,
+          maxlat: bounds.maxLat,
+          maxlon: bounds.maxLng,
         },
+        {
+          headers: { "x-auth-token": localStorage.getItem("token") },
+        }
+      );
+      await axios.post(
+        "http://localhost:5000/datas",
+    
+       {name: inputLocations,
+        lat: coordinates.lat,
+        lon: coordinates.lng,
+        minlat: bounds.minLat,
+        minlon: bounds.minLng,
+        maxlat: bounds.maxLat,
+        maxlon: bounds.maxLng,},
         {
           headers: { "x-auth-token": localStorage.getItem("token") },
         }
@@ -128,7 +162,7 @@ const Map = () => {
               className="search-input"
             />
             <button onClick={handleSearch} className="search-button">
-             SEARCH
+              SEARCH
             </button>
           </div>
           <MapContainer
@@ -137,14 +171,15 @@ const Map = () => {
             className="leaflet-map"
           >
             <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+              url="
+https://tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey=40edc45213c54421a6b3e4598aa52dab"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
             />
             <Marker
               position={[locations.coordinates.lat, locations.coordinates.lng]}
               icon={customIcon}
             />
-            <UpdateMapCenter coordinates={locations.coordinates} />
+            <UpdateMapCenter coordinates={locations.coordinates} setBounds={setBounds} />
           </MapContainer>
           <div className="locations-info">
             <p>
@@ -154,18 +189,16 @@ const Map = () => {
               <strong>Coordinates:</strong> Lat: {locations.coordinates.lat},
               Lng: {locations.coordinates.lng}
             </p>
+            <p>
+              <strong>Bounds:</strong>
+              <br />
+              Min Lat: {bounds.minLat}, Max Lat: {bounds.maxLat}
+              <br />
+              Min Lng: {bounds.minLng}, Max Lng: {bounds.maxLng}
+            </p>
           </div>
         </div>
       </div>
-      {/* <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        closeOnClick
-        pauseOnHover
-        draggable
-        pauseOnFocusLoss
-      /> */}
     </div>
   );
 };

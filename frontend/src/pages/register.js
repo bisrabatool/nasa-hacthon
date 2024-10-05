@@ -44,11 +44,14 @@ const AuthPage = () => {
     }
   };
 
+  // Google Authentication Handler
   const handleGoogleAuth = () => {
+    // Redirects user to Google OAuth page
     window.open("http://localhost:5000/auth/google", "_self");
   };
 
   useEffect(() => {
+    // Dynamically generating the starry background using CSS box-shadow
     document.documentElement.style.setProperty(
       "--shadows-small",
       getRandomBoxShadow(700)
@@ -61,7 +64,15 @@ const AuthPage = () => {
       "--shadows-big",
       getRandomBoxShadow(100)
     );
-  }, []);
+
+    
+    const query = new URLSearchParams(window.location.search);
+    const token = query.get("token");
+    if (token) {
+      localStorage.setItem("token", token); 
+      navigate("/Home"); 
+    }
+  }, [navigate]);
 
   return (
     <div className="background-container">
@@ -82,7 +93,7 @@ const AuthPage = () => {
           {/* Toggle Between Login and Signup */}
           {isLogin ? (
             <>
-              <h2  className="login_logo">LOGIN</h2>
+              <h2 className="login_logo">LOGIN</h2>
               <form onSubmit={handleAuth}>
                 <div className="login_input-container">
                   <i className="fa-regular fa-user" id="login_icons"></i>
@@ -130,7 +141,7 @@ const AuthPage = () => {
             </>
           ) : (
             <>
-              <h2  className="login_logo">SIGNUP</h2>
+              <h2 className="login_logo">SIGNUP</h2>
               <form className="signin_form" onSubmit={handleAuth}>
                 <div className="signin_input-container">
                   <i className="fa-regular fa-user" id="signin_icons"></i>

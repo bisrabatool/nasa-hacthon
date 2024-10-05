@@ -4,7 +4,8 @@ const authenticate = require('../middleware/authenticate');
 
 const router = express.Router();
 
-router.get('/', authenticate, getLocation);
+router.get('/', authenticate, getLocation,);
 router.post('/', authenticate, saveLocation);
+
 
 module.exports = router;

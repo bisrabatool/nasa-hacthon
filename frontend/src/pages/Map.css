@@ -6,7 +6,7 @@
   border-radius: 8px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   position: relative;
-  z-index: 2; /* Ensures the map container is above the moon image */
+  z-index: 2; 
   cursor: pointer;
   border: solid rgb(225, 225, 225, 0.15);
   backdrop-filter: blur(10px);
@@ -15,7 +15,7 @@
 .moon-image {
   position: absolute;
 
-  z-index: 1; /* Ensures the moon is behind the map container */
+  z-index: 1;
 }
 
 .map-search-bar {

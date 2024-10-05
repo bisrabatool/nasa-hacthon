@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./pages/Register";
 import Home from  "./pages/Home";
 import Map from "./pages/Map"
+import Data from "./pages/data";
 function App() {
 
   return (
@@ -10,6 +11,7 @@ function App() {
       <Route path="/" element={<Register />} />
        <Route path="/Home" element={<Home/>}/>
         <Route path="/Map" element={<Map/>}/>
+        <Route path="/data" element={<Data/>}/>
       </Routes>
     </BrowserRouter>
   );

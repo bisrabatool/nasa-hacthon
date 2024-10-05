@@ -7,6 +7,7 @@ const session = require('express-session');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes.js');
 const locationRoutes = require('./routes/locationRoutes.js');
+const dataRoute = require ('./routes/dataRoute.js')
 const authenticate = require('./middleware/authenticate.js');
 require('./config/passport')(passport);
 
@@ -16,7 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use(session({ secret: process.env.JWT_SECRET, resave: false, saveUninitialized: true }));
+app.use(session({ secret: process.env.JWT_GOOGLE_SECRET, resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -26,5 +27,6 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 
 app.use('/auth', authRoutes);
 app.use('/locations', authenticate, locationRoutes); 
+app.use('/datas', authenticate, dataRoute); 
 
 app.listen(5000, () => console.log('Server running on port 5000'));
