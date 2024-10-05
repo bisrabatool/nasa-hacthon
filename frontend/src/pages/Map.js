@@ -5,6 +5,9 @@ import L from "leaflet";
 import "./Map.css";
 import "leaflet/dist/leaflet.css";
 import markerIcon from "../assets/marker.png";
+// import { ToastContainer, toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+import "./Register.css";
 import moonImage from "../assets/earth1.png";
 
 const getRandomBoxShadow = (n) => {
@@ -148,9 +151,9 @@ const Map = () => {
       <div id="stars"></div>
       <div id="stars2"></div>
       <div id="stars3"></div>
-      <div>
+      {/* <div>
         <img src={moonImage} alt="moon" className="moon-image" />
-      </div>
+      </div> */}
       <div className="">
         <div className="map-container">
           <div className="map-search-bar">
@@ -171,8 +174,7 @@ const Map = () => {
             className="leaflet-map"
           >
             <TileLayer
-              url="
-https://tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey=40edc45213c54421a6b3e4598aa52dab"
+              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
             />
             <Marker
