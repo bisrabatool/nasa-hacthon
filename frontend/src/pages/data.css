@@ -1,28 +1,37 @@
 
 .table-container {
-  max-width: 100%;
+
+  max-width: 50%;
   padding: 20px;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(1px);
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  max-height: 450px;  
-  overflow-y: auto;
-  margin: 20px;
+   max-height: 570px;
+  overflow-y: auto; 
+  margin: 20px auto; 
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+}
+
+.table_head {
+  color: white;
+  font-size: 40px;
+  font-weight: 900;
+  font-family: "Monomaniac One", sans-serif;
+  font-style: normal;
+  text-align: center; 
+  margin-bottom: 20px; 
 }
 
 
 .vertical-table {
   display: grid;
-  grid-template-columns: 1fr 1fr; 
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
   color: white;
-  font-weight: 600;
-}
-.table_head{
-  color: white;
-  font-size: 30px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .vertical-table div {
@@ -32,12 +41,33 @@
 }
 
 .vertical-table div:nth-child(odd) {
-  background-color: rgba(0, 0, 0, 0.6); 
+  background-color: rgba(0, 0, 0, 0.6);
   font-weight: bold;
 }
 
 .vertical-table div:nth-child(even) {
   background-color: rgba(0, 0, 0, 0.6);
+}
+
+.download-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #ffffff5c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: bold;
+}
+
+.download-btn:hover {
+  background-color: rgb(0, 119, 255);
+  color: white;
 }
 
 @media (max-width: 768px) {
@@ -63,20 +93,20 @@
 }
 
 .table-container::-webkit-scrollbar {
-  width: 12px; 
+  width: 12px;
 }
 
 .table-container::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2); 
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
 }
 
 .table-container::-webkit-scrollbar-thumb {
-  background-color:rgba(255, 255, 255, 0.1) ;
-  border-radius: 10px; 
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
 }
 
 .table-container {
-  scrollbar-width: thick; 
-  scrollbar-color: rgba(255, 255, 255, 0.1) rgba(0, 0, 0, 0.2); 
+  scrollbar-width: thick;
+  scrollbar-color: rgba(255, 255, 255, 0.1) rgba(0, 0, 0, 0.2);
 }

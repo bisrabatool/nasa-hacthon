@@ -2,19 +2,21 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  background-color: rgb(2500, 2500, 250, 0.06);
+  background-color: rgba(250, 250, 250, 0.06); 
   border-radius: 8px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 2; 
   cursor: pointer;
-  border: solid rgb(225, 225, 225, 0.15);
+  border: solid rgba(225, 225, 225, 0.15);
   backdrop-filter: blur(10px);
+  overflow-y: auto; 
+  max-height: 600px;
+  color: white; 
 }
 
 .moon-image {
   position: absolute;
-
   z-index: 1;
 }
 
@@ -32,13 +34,14 @@
   padding-left: 16px;
   margin-right: 10px;
   font-size: 16px;
-  color: #fff;
+  color: #fff; 
   border: 1px solid #ffffff5c;
-  background-color: rgb(2500, 2500, 250, 0.06);
+  background-color: rgba(250, 250, 250, 0.06); 
   outline: none;
   border-radius: 19px;
   transition: all 0.5s;
 }
+
 .search-input:focus {
   box-shadow: 0 0 1rem hsl(270, 14%, 95%);
   outline: none;
@@ -49,13 +52,13 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-
-  color: #fff;
+  color: #fff; 
   font-family: "Monomaniac One", sans-serif;
   font-weight: 400;
   font-style: normal;
   background-color: #ffffff5c;
   border: none;
+  text-decoration: none; 
 }
 
 .search-button:hover {
@@ -73,8 +76,56 @@
 .location-info {
   text-align: center;
   font-size: 16px;
+  color: #fff; 
 }
 
 .location-info p {
   margin: 5px 0;
+  color: #fff; 
+}
+
+.view_btn {
+  padding: 10px 20px;
+  background-color: #ffffff5c;
+  color: white; 
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 16px; 
+}
+
+.view_btn a {
+  color: white; 
+  text-decoration: none; 
+}
+
+.map-container::-webkit-scrollbar {
+  width: 10px; 
+}
+
+.map-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1); 
+  border-radius: 10px; 
+}
+
+.map-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5); 
+  border-radius: 10px; 
+}
+
+.map-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.8); 
+}
+
+
+.map-container {
+  scrollbar-width: thick; 
+  scrollbar-color: rgba(255, 255, 255, 0.5) rgba(255, 255, 255, 0.1); 
 }

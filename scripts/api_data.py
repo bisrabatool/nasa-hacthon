@@ -3,6 +3,7 @@ import requests
 from requests.auth import HTTPBasicAuth
 from flask import Flask, jsonify
 import threading
+import time
 
 app = Flask(__name__)
 
@@ -19,39 +20,19 @@ def fetch_weather_data(lat, lon, minlat, minlon, maxlat, maxlon):
         print(f"Error fetching weather data: {e}")
         return None, None, None, None, None
 
-    temp_record = []
-    try:
-        data = response.json()
-        weather_data = data['data']
-        for item in weather_data:
-            for coord in item['coordinates']:
-                lat = coord['lat']
-                lon = coord['lon']
-                dates = coord['dates']
-                for date in dates:
-                    temp_record.append({
-                        'latitude': lat,
-                        'longitude': lon,
-                        'date': date['date'],
-                        'temperature': date['value']
-                    })
-    except (KeyError, ValueError) as e:
-        print(f"Error processing weather data: {e}")
-        return None, None, None, None, None
-
     api_url = f"https://api.meteomatics.com/{current_time}/t_2m:C,precip_1h:mm,wind_speed_10m:ms/{lat},{lon}/json"
     try:
         response = requests.get(api_url, auth=HTTPBasicAuth(username, password))
         response.raise_for_status()
     except requests.RequestException as e:
         print(f"Error fetching detailed weather data: {e}")
-        return None, None, None, None, temp_record
+        return None, None, None, None
 
     try:
         data = response.json()
     except ValueError as e:
         print(f"Error decoding JSON: {e}")
-        return None, None, None, None, temp_record
+        return None, None, None, None
 
     temperature, wind_speed, wind_dir, precip = None, None, None, None
     for entry in data['data']:
@@ -64,7 +45,8 @@ def fetch_weather_data(lat, lon, minlat, minlon, maxlat, maxlon):
         elif entry['parameter'] == 'precip_1h:mm':
             precip = entry['coordinates'][0]['dates'][0]['value']
 
-    return temperature, wind_speed, wind_dir, precip, temp_record
+    return temperature, wind_speed, wind_dir, precip
+
 
 def fetch_all_users_data():
     MONGO_URI = "mongodb+srv://duresameen32:ZrPtbRFKmjZCD8hh@cluster0.kilku.mongodb.net/nasadata?retryWrites=true&w=majority&appName=Cluster0"
@@ -75,7 +57,7 @@ def fetch_all_users_data():
         records = collection.find()
     except Exception as e:
         print(f"Error connecting to MongoDB: {e}")
-        return
+        return None
 
     if collection.count_documents({}) > 0:
         for record in records:
@@ -88,7 +70,7 @@ def fetch_all_users_data():
             name = record.get('name')
             userId = record.get('userId')
 
-            temperature, wind_speed, wind_dir, precip, temp_record = fetch_weather_data(lat, lon, minlat, minlon, maxlat, maxlon)
+            temperature, wind_speed, wind_dir, precip = fetch_weather_data(lat, lon, minlat, minlon, maxlat, maxlon)
 
             if all(v is not None for v in [temperature, wind_speed, wind_dir, precip]):
                 try:
@@ -100,7 +82,6 @@ def fetch_all_users_data():
                                 'wind_speed': wind_speed,
                                 'wind_dir': wind_dir,
                                 'precip': precip,
-                                'temp_record': temp_record,
                             }
                         }
                     )
@@ -113,22 +94,33 @@ def fetch_all_users_data():
     else:
         print("No records found")
 
+
 @app.route('/fetch-weather-data', methods=['POST'])
 def fetch_weather_data_api():
     fetch_all_users_data()
     return jsonify({"status": "success", "message": "Weather data fetched"}), 200
 
-def watch_user_collection():
-    MONGO_URI = "mongodb+srv://duresameen32:ZrPtbRFKmjZCD8hh@cluster0.kilku.mongodb.net/nasadata?retryWrites=true&w=majority&appName=Cluster0"
-    client = MongoClient(MONGO_URI)
-    db = client['nasadata']
-    collection = db['datas']
 
-    with collection.watch() as stream:
-        for change in stream:
-            if change['operationType'] == 'insert':
+def watch_user_collection():
+    MONGO_URI = "mongodb://duresameen32:ZrPtbRFKmjZCD8hh@cluster0.kilku.mongodb.net/nasadata?retryWrites=true&w=majority&appName=Cluster0"
+    try:
+        client = MongoClient(MONGO_URI)
+        db = client['nasadata']
+        collection = db['datas']
+
+        print('Watching for new entries in the user collection...')
+        last_checked_count = collection.count_documents({})
+        
+        while True:
+            current_count = collection.count_documents({})
+            if current_count > last_checked_count:
                 print("New user entry detected.")
                 fetch_all_users_data()
+                last_checked_count = current_count
+            time.sleep(10)  # Check every 10 seconds
+    except Exception as e:
+        print(f"Error watching user collection: {e}")
+
 
 if __name__ == "__main__":
     threading.Thread(target=lambda: app.run(port=5000)).start()

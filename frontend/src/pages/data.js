@@ -59,6 +59,33 @@ const DataPage = () => {
     fetchData();
   }, []);
 
+  const downloadCSV = () => {
+    if (!userData) return;
+
+    const csvRows = [
+      ["Name", userData.name],
+      ["Latitude", userData.lat],
+      ["Longitude", userData.lon],
+      ["Min Latitude", userData.minlat],
+      ["Min Longitude", userData.minlon],
+      ["Max Latitude", userData.maxlat],
+      ["Max Longitude", userData.maxlon],
+      ["Temperature (°C)", userData.temperature],
+      ["Wind Speed (m/s)", userData.wind_speed],
+      ["Precipitation (mm)", userData.precip],
+      ["Wind Direction (°)", userData.wind_dir],
+    ];
+
+    const csvContent = csvRows.map(e => e.join(",")).join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "location_data.csv");
+    link.click();
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -78,7 +105,9 @@ const DataPage = () => {
       <div id="stars3"></div>
 
       <div className="table-container">
-        <p className="table_head">Location Data</p>
+        <div className="table_head">
+         <p>Location Data</p>
+        </div>
         <div className="vertical-table">
           <div>Name</div><div>{userData.name}</div>
           <div>Latitude</div><div>{userData.lat}</div>
@@ -87,11 +116,14 @@ const DataPage = () => {
           <div>Min Longitude</div><div>{userData.minlon}</div>
           <div>Max Latitude</div><div>{userData.maxlat}</div>
           <div>Max Longitude</div><div>{userData.maxlon}</div>
-          <div>Temperature (°C)</div><div>{userData.tempreture}</div>
+          <div>Temperature (°C)</div><div>{userData.temperature}</div>
           <div>Wind Speed (m/s)</div><div>{userData.wind_speed}</div>
           <div>Precipitation (mm)</div><div>{userData.precip}</div>
           <div>Wind Direction (°)</div><div>{userData.wind_dir}</div>
         </div>
+        <button className="download-btn" onClick={downloadCSV}>
+          Download CSV
+        </button>
       </div>
 
       <ToastContainer
