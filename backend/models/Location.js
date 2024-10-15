@@ -9,6 +9,10 @@ const locationSchema = new mongoose.Schema({
   minlon: { type: Number, required: true },
   maxlat: { type: Number, required: true },
   maxlon: { type: Number, required: true },
+  wind_dir: { type: Number, required: true },
+  temperature: { type: Number, required: true },
+  precip: { type: Number, required: true },
+ wind_speed: {type: Number, required: true},
 }, { timestamps: true });
 
 module.exports = mongoose.model('Location', locationSchema);

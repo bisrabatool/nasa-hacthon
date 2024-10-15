@@ -36,7 +36,7 @@ const DataPage = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/datas", {
+        const response = await axios.get("http://localhost:5000/locations", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
